@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE statedata SYSTEM "stateData.dtd">
+<statedata>
+	<controlData identifier="openloop" 
+	             mode="POSITION_DEGREES"/>
+
+	<mechanismTarget stateIdentifier="RELEASE_OPEN_OPEN"
+	                 controlDataIdentifier="openloop"
+                     controlDataIdentifier2="openloop"
+					 value="60.0"
+                     secondValue="90.0"/>
+
+
+	<mechanismTarget stateIdentifier="RELEASE_OPEN_CLOSED"
+	                 controlDataIdentifier="openloop"
+                     controlDataIdentifier2="openloop"
+					 value="60.0"
+                     secondValue="120.0"/>
+
+	<mechanismTarget stateIdentifier="RELEASE_CLOSED_OPEN"
+	                 controlDataIdentifier="openloop"
+                     controlDataIdentifier2="openloop"
+					 value="100.0"
+                     secondValue="90.0"/>
+                     
+	<mechanismTarget stateIdentifier="RELEASE_CLOSED_CLOSED"
+	                 controlDataIdentifier="openloop"
+                     controlDataIdentifier2="openloop"
+					 value="100.0"
+                     secondValue="120.0"/>
+</statedata>

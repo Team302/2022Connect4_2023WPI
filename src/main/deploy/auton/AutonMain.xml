@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE auton SYSTEM "auton.dtd">
+<auton>
+<primitive id="DRIVE_TO_WALL"
+            time="5.0"
+            headingOption="MAINTAIN"
+            drivespeed="-400.0"
+            arm="ARM_MOVING_UP"
+            />
+<primitive id="STOP_DRIVING"
+            release="RELEASE_OPEN_OPEN"
+            time="2.0"
+            />
+</auton>

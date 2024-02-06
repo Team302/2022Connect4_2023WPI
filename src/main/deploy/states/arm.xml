@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE statedata SYSTEM "stateData.dtd">
+<statedata>
+    <controlData identifier="openloop" 
+	             mode="PERCENT_OUTPUT"/>
+    <mechanismTarget stateIdentifier="ARM_OFF"
+                 controlDataIdentifier="openloop"
+                 value="0.0"/>
+    <mechanismTarget stateIdentifier="ARM_UP"
+                 controlDataIdentifier="openloop"
+                 value="0.0"/>
+    <mechanismTarget stateIdentifier="ARM_DOWN"
+                 controlDataIdentifier="openloop"
+                 value="0.0"/>
+    <mechanismTarget stateIdentifier="ARM_MOVING_UP"
+                 controlDataIdentifier="openloop"
+                 value="0.3"/>
+    <mechanismTarget stateIdentifier="ARM_MOVING_DOWN"
+                 controlDataIdentifier="openloop"
+                 value="-0.2"/>              
+</statedata>

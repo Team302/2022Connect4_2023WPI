@@ -1,0 +1,24 @@
+<!ELEMENT auton (primitive*) >
+
+
+<!ELEMENT primitive EMPTY >
+<!ATTLIST primitive 
+          id                ( STOP_DRIVING | HOLD_POSITION | DRIVE_TO_WALL |
+                              DRIVE_DISTANCE | DRIVE_TIME | 
+                              TURN_ANGLE_ABS | TURN_ANGLE_REL | DRIVE_PATH | RESET_POSITION) "STOP_DRIVING"
+		  time				CDATA #IMPLIED
+          distance		    CDATA "0.0"
+          headingOption     CDATA "MAINTAIN"
+          heading           CDATA "0.0"
+          drivespeed        CDATA "0.0"
+          enddrivespeed     CDATA "0.0"
+          xloc				CDATA "0.0"
+          yloc				CDATA "0.0"
+          pathname          CDATA #IMPLIED
+          intake            (INTAKE_OFF | INTAKE_ON | INTAKE_EXPEL) "INTAKE_OFF"
+          arm               (OFF | ARM_UP | ARM_DOWN | ARM_MOVING_UP | ARM_MOVING_DOWN) "OFF"
+          release           (RELEASE_CLOSED_CLOSED | RELEASE_CLOSED_OPEN | RELEASE_OPEN_CLOSED | RELEASE_OPEN_OPEN) "RELEASE_CLOSED_CLOSED"
+          flagarm           (FLAG_RELEASE | FLAG_GRAB) "FLAG_RELEASE"
+>
+
+
