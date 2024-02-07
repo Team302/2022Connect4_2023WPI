@@ -41,6 +41,9 @@ ServoUsage* ServoUsage::GetInstance()
 
 ServoUsage::ServoUsage()
 {
+    m_usageMap["RELEASE_SERVO"]  = SERVO_USAGE::RELEASE_SERVO;
+    m_usageMap["RELEASE_SERVO2"]  = SERVO_USAGE::RELEASE_SERVO2;
+    m_usageMap["FLAG_SERVO"]  = SERVO_USAGE::FLAG_SERVO;
 }
 
 ServoUsage::~ServoUsage()

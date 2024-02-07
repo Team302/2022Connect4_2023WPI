@@ -1,4 +1,3 @@
-
 //====================================================================================================================================================
 // Copyright 2022 Lake Orion Robotics FIRST Team 302 
 //
@@ -16,52 +15,22 @@
 
 #pragma once
 
-// C++ Includes
-#include <map>
-#include <memory>
-#include <string>
+#include <mechanisms/base/Mech2Servos.h>
 
-// FRC includes
-
-// Team 302 includes
-
-
-// Third Party Includes
-
-
-
-class ServoUsage
+class DragonServo;
+class release : public Mech2Servos
 {
-
     public:
-
-        /// @enum SERVO_USAGE
-        /// @brief Defines Servo usages.  This should be modified for each robot.
-        enum SERVO_USAGE
-        {
-            UNKNOWN_SERVO_USAGE = -1,
-            RELEASE_SERVO, 
-            RELEASE_SERVO2,
-            FLAG_SERVO,
-            MAX_SERVO_USAGES
-        };
-
-
-        static ServoUsage* GetInstance();
-
-        SERVO_USAGE GetUsage
-        ( 
-            const std::string         usageString
+        /// @brief Create a generic mechanism wiht 1 servo 
+        /// @param [in] std::shared_ptr<DragonServo> servo used by this mechanism
+        release
+        (
+            std::string                                 controlFileName,
+            std::string                                 networkTableName,
+            DragonServo*                                servo,
+            DragonServo*                                servo2
         );
-
-    private:
-        static ServoUsage*    m_instance;
-        ServoUsage();
-        ~ServoUsage();
-        
-		std::map <std::string, SERVO_USAGE> m_usageMap;
+	    release() = delete;
+	    virtual ~release() = default;
 
 };
-
-
-

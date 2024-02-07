@@ -12,30 +12,36 @@
 /// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 /// OR OTHER DEALINGS IN THE SOFTWARE.
 //====================================================================================================================================================
-#pragma once
+
+
+// C++ Includes
 #include <string>
 
+// FRC includes
+
+// Team 302 includes
 #include <mechanisms/base/Mech1MotorState.h>
-#include <mechanisms/intake/Intake.h>
+#include <mechanisms/controllers/ControlData.h>
+#include <mechanisms/example/ExampleState.h>
+#include <mechanisms/MechanismFactory.h>
 
-class ControlData;
+// Third Party Includes
 
-class IntakeState : public Mech1MotorState
+using namespace std;
+
+ExampleState::ExampleState
+(
+    string                          stateName,
+    int                             stateId,
+    ControlData*                    control, 
+    double                          target
+) : Mech1MotorState( MechanismFactory::GetMechanismFactory()->GetExample(), stateName, stateId, control, target),
+    m_example(MechanismFactory::GetMechanismFactory()->GetExample())
 {
-    public:
+    
+}
 
-        IntakeState() = delete;
-        IntakeState
-        (
-            std::string                     stateName,
-            int                             stateId,
-            ControlData*                    control,
-            double                          target
-        );
-        ~IntakeState() = default;
-
-        Intake* GetIntake() const {return m_intake;}
-
-    private:
-        Intake*        m_intake;
-};
+bool ExampleState::AtTarget() const
+{
+    return true;
+}

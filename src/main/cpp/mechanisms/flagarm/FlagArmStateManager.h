@@ -12,38 +12,48 @@
 /// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 /// OR OTHER DEALINGS IN THE SOFTWARE.
 //====================================================================================================================================================
+
 #pragma once
+
+// C++ Includes
 #include <string>
+
+// FRC includes
+
+
+// Team 302 includes
 #include <mechanisms/base/StateMgr.h>
 #include <mechanisms/StateStruc.h>
 
- 
-class Intake;
+
+
+
+// Third Party Includes
+class FlagArm;
 class PrimitiveParams;
 
-class IntakeStateMgr : public StateMgr
+class FlagArmStateManager : public StateMgr
 {
     public:
         /// @enum the various states of the Intake
-        enum INTAKE_STATE
+        enum FLAG_ARM_STATE
         {
-            INTAKE_OFF,
-            INTAKE_ON,
-            INTAKE_EXPEL
+            GRABBER_OPEN,
+            GRABBER_CLOSED
+            
+        };
+        const std::string m_openXmlString = "FLAG_RELEASE";
+        const std::string m_closedXmlString = "FLAG_GRAB";
+        
+        const std::map<const std::string, FlagArmStateManager::FLAG_ARM_STATE> m_FlagXmlStringToStateEnumMap
+        {   {m_openXmlString, FlagArmStateManager::FLAG_ARM_STATE::GRABBER_OPEN},
+            {m_closedXmlString, FlagArmStateManager::FLAG_ARM_STATE::GRABBER_CLOSED}
         };
 
-        const std::string m_intakeOffXmlString = "INTAKE_OFF";
-        const std::string m_intakeIntakeXmlString = "INTAKE_ON";
-        const std::string m_intakeExpelXmlString = "INTAKE_EXPEL";
         
-        
-        const std::map<const std::string, INTAKE_STATE> m_intakeXmlStringToStateEnumMap
-        {   {m_intakeOffXmlString, INTAKE_STATE::INTAKE_OFF},
-            {m_intakeIntakeXmlString, INTAKE_STATE::INTAKE_ON},
-            {m_intakeExpelXmlString, INTAKE_STATE::INTAKE_EXPEL}
-        };
-        static IntakeStateMgr* GetInstance();
-        void CheckForStateTransition() override;
+		/// @brief  Find or create the state manmanager
+		/// @return IntakeStateMgr* pointer to the state manager
+		static FlagArmStateManager* GetInstance();
 
         /// @brief  Get the current Parameter parm value for the state of this mechanism
         /// @param PrimitiveParams* currentParams current set of primitive parameters
@@ -53,14 +63,17 @@ class IntakeStateMgr : public StateMgr
             PrimitiveParams*    currentParams
         ) override;
 
+        /// @brief Check if driver inputs or sensors trigger a state transition
+        void CheckForStateTransition() override;
     private:
-        IntakeStateMgr();
-        ~IntakeStateMgr() = default;
 
-        Intake*                                m_intake;
+        FlagArmStateManager();
+        ~FlagArmStateManager() = default;
 
-        static IntakeStateMgr*	m_instance;
-        const StateStruc m_offState = {INTAKE_STATE::INTAKE_OFF, m_intakeOffXmlString, StateType::INTAKE_STATE, true};
-        const StateStruc m_onState = {INTAKE_STATE::INTAKE_ON, m_intakeIntakeXmlString, StateType::INTAKE_STATE, false};
-        const StateStruc m_expelState = {INTAKE_STATE::INTAKE_EXPEL, m_intakeExpelXmlString, StateType::INTAKE_STATE, false};
+        FlagArm*                    m_flagArm;
+
+        static FlagArmStateManager* m_instance;
+
+        const StateStruc m_openState = {FlagArmStateManager::FLAG_ARM_STATE::GRABBER_OPEN, m_openXmlString,  StateType::FLAGARM_STATE, true};
+        const StateStruc m_closedState = {FlagArmStateManager::FLAG_ARM_STATE::GRABBER_CLOSED, m_closedXmlString, StateType::FLAGARM_STATE, false};
 };

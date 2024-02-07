@@ -15,27 +15,23 @@
 #pragma once
 #include <string>
 
-#include <mechanisms/base/Mech1MotorState.h>
-#include <mechanisms/intake/Intake.h>
+#include <mechanisms/base/Mech1ServoState.h>
+#include <mechanisms/flagarm/FlagArm.h>
+class FlagArm;
 
-class ControlData;
-
-class IntakeState : public Mech1MotorState
+class FlagArmState : public Mech1ServoState
 {
     public:
 
-        IntakeState() = delete;
-        IntakeState
+        FlagArmState() = delete;
+        FlagArmState
         (
             std::string                     stateName,
             int                             stateId,
-            ControlData*                    control,
             double                          target
         );
-        ~IntakeState() = default;
-
-        Intake* GetIntake() const {return m_intake;}
+        ~FlagArmState() = default;
 
     private:
-        Intake*        m_intake;
+        FlagArm*        m_FlagArm;
 };

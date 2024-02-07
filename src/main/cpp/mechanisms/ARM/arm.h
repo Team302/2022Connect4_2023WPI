@@ -1,4 +1,3 @@
-
 //====================================================================================================================================================
 // Copyright 2022 Lake Orion Robotics FIRST Team 302 
 //
@@ -17,51 +16,29 @@
 #pragma once
 
 // C++ Includes
-#include <map>
 #include <memory>
 #include <string>
 
-// FRC includes
-
 // Team 302 includes
+#include <mechanisms/base/Mech1IndMotor.h>
 
-
-// Third Party Includes
-
-
-
-class ServoUsage
+class arm : public Mech1IndMotor
 {
-
-    public:
-
-        /// @enum SERVO_USAGE
-        /// @brief Defines Servo usages.  This should be modified for each robot.
-        enum SERVO_USAGE
-        {
-            UNKNOWN_SERVO_USAGE = -1,
-            RELEASE_SERVO, 
-            RELEASE_SERVO2,
-            FLAG_SERVO,
-            MAX_SERVO_USAGES
-        };
-
-
-        static ServoUsage* GetInstance();
-
-        SERVO_USAGE GetUsage
-        ( 
-            const std::string         usageString
+	public:
+        /// @brief Create a generic mechanism wiht 1 independent motor 
+        /// @param [in] MechanismTypes::MECHANISM_TYPE the type of mechansim
+        /// @param [in] std::string the name of the file that will set control parameters for this mechanism
+        /// @param [in] std::string the name of the network table for logging information
+        /// @param [in] std::shared_ptr<IDragonMotorController> motor controller used by this mechanism
+        arm
+        (
+            std::string                                 controlFileName,
+            std::string                                 networkTableName,
+            std::shared_ptr<IDragonMotorController>     motorController
         );
+	    arm() = delete;
+	    ~arm() override = default;
 
-    private:
-        static ServoUsage*    m_instance;
-        ServoUsage();
-        ~ServoUsage();
-        
-		std::map <std::string, SERVO_USAGE> m_usageMap;
-
+        bool IsUp() const;
+        bool IsDown() const;       
 };
-
-
-

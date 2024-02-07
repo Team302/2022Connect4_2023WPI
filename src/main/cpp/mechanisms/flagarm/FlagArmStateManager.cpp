@@ -19,77 +19,68 @@
 // Team 302 includes
 #include <auton/PrimitiveParams.h>
 #include <mechanisms/base/StateMgr.h>
+#include <mechanisms/controllers/MechanismTargetData.h>
+#include <mechanisms/flagarm/FlagArmStateManager.h>
 #include <mechanisms/MechanismFactory.h>
 #include <mechanisms/StateStruc.h>
-#include <mechanisms\Intake\IntakeStateManager.h>
 #include <TeleopControl.h>
-#include <utils/Logger.h>
 
 // Third Party Includes
 
 using namespace std;
 
 
-IntakeStateMgr* IntakeStateMgr::m_instance = nullptr;
-IntakeStateMgr* IntakeStateMgr::GetInstance()
+FlagArmStateManager* FlagArmStateManager::m_instance = nullptr;
+FlagArmStateManager* FlagArmStateManager::GetInstance()
 {
-	if ( IntakeStateMgr::m_instance == nullptr )
+	if ( FlagArmStateManager::m_instance == nullptr )
 	{
 	    auto mechFactory = MechanismFactory::GetMechanismFactory();
-	    auto intake = mechFactory->GetIntake();
-	    if (intake != nullptr)
+	    auto flagarm = mechFactory->GetFlag();
+	    if (flagarm != nullptr)
         {
-		    IntakeStateMgr::m_instance = new IntakeStateMgr();
+		    FlagArmStateManager::m_instance = new FlagArmStateManager();
         }
 	}
-	return IntakeStateMgr::m_instance;
+	return FlagArmStateManager::m_instance;
     
 }
 
 
 /// @brief    initialize the state manager, parse the configuration file and create the states.
-IntakeStateMgr::IntakeStateMgr() : StateMgr(),
-                                   m_intake(MechanismFactory::GetMechanismFactory()->GetIntake())
+FlagArmStateManager::FlagArmStateManager() : StateMgr(),
+                                             m_flagArm(MechanismFactory::GetMechanismFactory()->GetFlag())
 {
     map<string, StateStruc> stateMap;
-    stateMap[m_intakeOffXmlString] = m_offState;
-    stateMap[m_intakeIntakeXmlString] = m_onState;
-    stateMap[m_intakeExpelXmlString] = m_expelState;  
+    stateMap[m_closedXmlString] = m_closedState;
+    stateMap[m_openXmlString] = m_openState; 
 
-    Init(m_intake, stateMap);
-    if (m_intake != nullptr)
+    Init(m_flagArm, stateMap);
+    if (m_flagArm != nullptr)
     {
-        m_intake->AddStateMgr(this);
+        m_flagArm->AddStateMgr(this);
     }
 }   
 
 /// @brief Check if driver inputs or sensors trigger a state transition
-void IntakeStateMgr::CheckForStateTransition()
+void FlagArmStateManager::CheckForStateTransition()
 {
 
-    if ( m_intake != nullptr )
+    if ( m_flagArm != nullptr )
     {    
-        auto currentState = static_cast<INTAKE_STATE>(GetCurrentState());
+        auto currentState = static_cast<FLAG_ARM_STATE>(GetCurrentState());
         auto targetState = currentState;
 
         auto controller = TeleopControl::GetInstance();
-        auto isOnSelected   = controller != nullptr ? controller->IsButtonPressed(TeleopControl::FUNCTION_IDENTIFIER::INTAKE_ON) || controller->IsButtonPressed(TeleopControl::FUNCTION_IDENTIFIER::ARM_GOING_UP) : false;
-        auto isExpelSelected   = controller != nullptr ? controller->IsButtonPressed(TeleopControl::FUNCTION_IDENTIFIER::INTAKE_EXPEL) : false;
+        auto isForwardSelected   = controller != nullptr ? controller->IsButtonPressed(TeleopControl::FLAG_RELEASE) : true;
 
-        Logger::GetLogger()->LogData(LOGGER_LEVEL::PRINT, m_intake->GetNetworkTableName(), string( "Is On Selected" ), isOnSelected);
-        Logger::GetLogger()->LogData(LOGGER_LEVEL::PRINT, m_intake->GetNetworkTableName(), string( "Is Expel Selected" ), isExpelSelected);
-        
-        if (isOnSelected)
+        if (isForwardSelected)
         {
-            targetState = INTAKE_STATE::INTAKE_ON;
-        }
-        else if (isExpelSelected)
-        {
-            targetState = INTAKE_STATE::INTAKE_EXPEL;
+            targetState = FLAG_ARM_STATE::GRABBER_OPEN;
         }
         else
         {
-            targetState = INTAKE_STATE::INTAKE_OFF;
+            targetState = FLAG_ARM_STATE::GRABBER_CLOSED;
         }
 
         if (targetState != currentState)
@@ -103,10 +94,10 @@ void IntakeStateMgr::CheckForStateTransition()
 /// @brief  Get the current Parameter parm value for the state of this mechanism
 /// @param PrimitiveParams* currentParams current set of primitive parameters
 /// @returns int state id - -1 indicates that there is not a state to set
-int IntakeStateMgr::GetCurrentStateParam
+int FlagArmStateManager::GetCurrentStateParam
 (
     PrimitiveParams*    currentParams
 ) 
 {
-    return currentParams != nullptr ? currentParams->GetIntakeState() : StateMgr::GetCurrentStateParam(currentParams);
+    return currentParams != nullptr ? currentParams->GetLFlagArmState() : StateMgr::GetCurrentStateParam(currentParams);
 }

@@ -12,6 +12,7 @@
 /// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 /// OR OTHER DEALINGS IN THE SOFTWARE.
 //====================================================================================================================================================
+
 #include <map>
 
 // FRC includes
@@ -20,78 +21,88 @@
 #include <auton/PrimitiveParams.h>
 #include <mechanisms/base/StateMgr.h>
 #include <mechanisms/MechanismFactory.h>
+#include <mechanisms/release/Release.h>
+#include <mechanisms/release/ReleaseState.h>
+#include <mechanisms/release/ReleaseStateMgr.h>
 #include <mechanisms/StateStruc.h>
-#include <mechanisms\Intake\IntakeStateManager.h>
 #include <TeleopControl.h>
-#include <utils/Logger.h>
+
 
 // Third Party Includes
 
 using namespace std;
 
 
-IntakeStateMgr* IntakeStateMgr::m_instance = nullptr;
-IntakeStateMgr* IntakeStateMgr::GetInstance()
+ReleaseStateMgr* ReleaseStateMgr::m_instance = nullptr;
+ReleaseStateMgr* ReleaseStateMgr::GetInstance()
 {
-	if ( IntakeStateMgr::m_instance == nullptr )
+	if ( ReleaseStateMgr::m_instance == nullptr )
 	{
 	    auto mechFactory = MechanismFactory::GetMechanismFactory();
-	    auto intake = mechFactory->GetIntake();
-	    if (intake != nullptr)
+	    auto release = mechFactory->GetRelease();
+	    if (release != nullptr)
         {
-		    IntakeStateMgr::m_instance = new IntakeStateMgr();
+		    ReleaseStateMgr::m_instance = new ReleaseStateMgr();
         }
 	}
-	return IntakeStateMgr::m_instance;
+	return ReleaseStateMgr::m_instance;
     
 }
 
 
 /// @brief    initialize the state manager, parse the configuration file and create the states.
-IntakeStateMgr::IntakeStateMgr() : StateMgr(),
-                                   m_intake(MechanismFactory::GetMechanismFactory()->GetIntake())
+ReleaseStateMgr::ReleaseStateMgr() : StateMgr(),
+                                     m_release(MechanismFactory::GetMechanismFactory()->GetRelease()),
+                                     m_nt()
 {
     map<string, StateStruc> stateMap;
-    stateMap[m_intakeOffXmlString] = m_offState;
-    stateMap[m_intakeIntakeXmlString] = m_onState;
-    stateMap[m_intakeExpelXmlString] = m_expelState;  
+    stateMap[m_releaseOpenClosedXMLString] = m_openClosedState;
+    stateMap[m_releaseOpenOpenXMLString] = m_openOpenState;
+    stateMap[m_releaseClosedOpenXmlString] = m_closedOpenState;  
+    stateMap[m_releaseClosedClosedXmlString] = m_closedClosedState;
 
-    Init(m_intake, stateMap);
-    if (m_intake != nullptr)
+    Init(m_release, stateMap);
+    if (m_release != nullptr)
     {
-        m_intake->AddStateMgr(this);
+        auto m_nt = m_release->GetNetworkTableName();
+        m_release->AddStateMgr(this);
     }
 }   
 
 /// @brief Check if driver inputs or sensors trigger a state transition
-void IntakeStateMgr::CheckForStateTransition()
+void ReleaseStateMgr::CheckForStateTransition()
 {
 
-    if ( m_intake != nullptr )
+    if ( m_release != nullptr )
     {    
-        auto currentState = static_cast<INTAKE_STATE>(GetCurrentState());
+        auto currentState = static_cast<RELEASE_STATE>(GetCurrentState());
         auto targetState = currentState;
 
         auto controller = TeleopControl::GetInstance();
-        auto isOnSelected   = controller != nullptr ? controller->IsButtonPressed(TeleopControl::FUNCTION_IDENTIFIER::INTAKE_ON) || controller->IsButtonPressed(TeleopControl::FUNCTION_IDENTIFIER::ARM_GOING_UP) : false;
-        auto isExpelSelected   = controller != nullptr ? controller->IsButtonPressed(TeleopControl::FUNCTION_IDENTIFIER::INTAKE_EXPEL) : false;
+        auto isOpenClosedSelected   = controller != nullptr ? controller->IsButtonPressed(TeleopControl::FUNCTION_IDENTIFIER::RELEASE_OPEN_CLOSED) : false;
+        auto isOpenOpenSelected   = controller != nullptr ? controller->IsButtonPressed(TeleopControl::FUNCTION_IDENTIFIER::RELEASE_OPEN_OPEN) : false;
+        auto isClosedOpenSelected = controller != nullptr ? controller->IsButtonPressed(TeleopControl::FUNCTION_IDENTIFIER::INTAKE_ON) || controller->IsButtonPressed(TeleopControl::FUNCTION_IDENTIFIER::ARM_GOING_DOWN) : false;
+        auto isClosedClosedSelected = controller != nullptr ? controller->IsButtonPressed(TeleopControl::FUNCTION_IDENTIFIER::ARM_GOING_UP) : false;
 
-        Logger::GetLogger()->LogData(LOGGER_LEVEL::PRINT, m_intake->GetNetworkTableName(), string( "Is On Selected" ), isOnSelected);
-        Logger::GetLogger()->LogData(LOGGER_LEVEL::PRINT, m_intake->GetNetworkTableName(), string( "Is Expel Selected" ), isExpelSelected);
-        
-        if (isOnSelected)
+
+
+        if (isOpenClosedSelected)
         {
-            targetState = INTAKE_STATE::INTAKE_ON;
+            targetState = RELEASE_STATE::OPEN_CLOSED;
         }
-        else if (isExpelSelected)
+        else if (isOpenOpenSelected)
         {
-            targetState = INTAKE_STATE::INTAKE_EXPEL;
-        }
-        else
-        {
-            targetState = INTAKE_STATE::INTAKE_OFF;
+            targetState = RELEASE_STATE::OPEN_OPEN;
         }
 
+        else if (isClosedClosedSelected)
+        {
+            targetState = RELEASE_STATE::CLOSED_CLOSED;
+        }
+        else if (isClosedOpenSelected)
+        {
+            targetState = RELEASE_STATE::CLOSED_OPEN;
+        }
         if (targetState != currentState)
         {
             SetCurrentState(targetState, true);
@@ -103,10 +114,12 @@ void IntakeStateMgr::CheckForStateTransition()
 /// @brief  Get the current Parameter parm value for the state of this mechanism
 /// @param PrimitiveParams* currentParams current set of primitive parameters
 /// @returns int state id - -1 indicates that there is not a state to set
-int IntakeStateMgr::GetCurrentStateParam
+int ReleaseStateMgr::GetCurrentStateParam
 (
     PrimitiveParams*    currentParams
 ) 
 {
-    return currentParams != nullptr ? currentParams->GetIntakeState() : StateMgr::GetCurrentStateParam(currentParams);
+    return currentParams != nullptr ? currentParams->GetReleaseState() : StateMgr::GetCurrentStateParam(currentParams);
 }
+
+

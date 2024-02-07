@@ -1,4 +1,3 @@
-
 //====================================================================================================================================================
 // Copyright 2022 Lake Orion Robotics FIRST Team 302 
 //
@@ -14,54 +13,25 @@
 // OR OTHER DEALINGS IN THE SOFTWARE.
 //====================================================================================================================================================
 
-#pragma once
-
 // C++ Includes
-#include <map>
-#include <memory>
 #include <string>
 
 // FRC includes
 
 // Team 302 includes
+#include <hw/DragonServo.h>
+#include <mechanisms/base/Mech2Servos.h>
+#include <mechanisms/release/release.h>
 
+using namespace std;
 
-// Third Party Includes
-
-
-
-class ServoUsage
-{
-
-    public:
-
-        /// @enum SERVO_USAGE
-        /// @brief Defines Servo usages.  This should be modified for each robot.
-        enum SERVO_USAGE
-        {
-            UNKNOWN_SERVO_USAGE = -1,
-            RELEASE_SERVO, 
-            RELEASE_SERVO2,
-            FLAG_SERVO,
-            MAX_SERVO_USAGES
-        };
-
-
-        static ServoUsage* GetInstance();
-
-        SERVO_USAGE GetUsage
-        ( 
-            const std::string         usageString
-        );
-
-    private:
-        static ServoUsage*    m_instance;
-        ServoUsage();
-        ~ServoUsage();
-        
-		std::map <std::string, SERVO_USAGE> m_usageMap;
-
-};
-
-
+release::release
+(
+    std::string                                 controlFileName,
+    std::string                                 networkTableName,
+    DragonServo*                                servo,
+    DragonServo*                                servo2
+) : Mech2Servos(MechanismTypes::MECHANISM_TYPE::RELEASE, controlFileName, networkTableName, servo, servo2)
+{}
+  
 

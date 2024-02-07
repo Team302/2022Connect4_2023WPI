@@ -1,6 +1,5 @@
-
 //====================================================================================================================================================
-// Copyright 2022 Lake Orion Robotics FIRST Team 302 
+// Copyright 2022 Lake Orion Robotics FIRST Team 302
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
 // to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
@@ -14,54 +13,19 @@
 // OR OTHER DEALINGS IN THE SOFTWARE.
 //====================================================================================================================================================
 
-#pragma once
-
-// C++ Includes
-#include <map>
-#include <memory>
 #include <string>
 
-// FRC includes
+#include <hw/DragonServo.h>
+#include <mechanisms/base/Mech1Servo.h>
+#include <mechanisms/flagarm/FlagArm.h>
 
-// Team 302 includes
+using namespace std;
 
-
-// Third Party Includes
-
-
-
-class ServoUsage
+FlagArm::FlagArm
+(
+string                                      controlFileName,
+string                                      networkTableName,
+DragonServo*                                servo
+) : Mech1Servo(MechanismTypes::MECHANISM_TYPE::FLAGARM,controlFileName,networkTableName,servo)
 {
-
-    public:
-
-        /// @enum SERVO_USAGE
-        /// @brief Defines Servo usages.  This should be modified for each robot.
-        enum SERVO_USAGE
-        {
-            UNKNOWN_SERVO_USAGE = -1,
-            RELEASE_SERVO, 
-            RELEASE_SERVO2,
-            FLAG_SERVO,
-            MAX_SERVO_USAGES
-        };
-
-
-        static ServoUsage* GetInstance();
-
-        SERVO_USAGE GetUsage
-        ( 
-            const std::string         usageString
-        );
-
-    private:
-        static ServoUsage*    m_instance;
-        ServoUsage();
-        ~ServoUsage();
-        
-		std::map <std::string, SERVO_USAGE> m_usageMap;
-
-};
-
-
-
+}

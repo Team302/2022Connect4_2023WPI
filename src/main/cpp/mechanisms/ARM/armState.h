@@ -13,29 +13,26 @@
 /// OR OTHER DEALINGS IN THE SOFTWARE.
 //====================================================================================================================================================
 #pragma once
+
 #include <string>
 
 #include <mechanisms/base/Mech1MotorState.h>
-#include <mechanisms/intake/Intake.h>
+#include <mechanisms/ARM/arm.h>
 
 class ControlData;
 
-class IntakeState : public Mech1MotorState
+class ArmState : public Mech1MotorState
 {
     public:
 
-        IntakeState() = delete;
-        IntakeState
+        ArmState() = delete;
+        
+        ArmState
         (
             std::string                     stateName,
             int                             stateId,
             ControlData*                    control,
             double                          target
         );
-        ~IntakeState() = default;
-
-        Intake* GetIntake() const {return m_intake;}
-
-    private:
-        Intake*        m_intake;
+        ~ArmState() = default;
 };

@@ -12,38 +12,44 @@
 /// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 /// OR OTHER DEALINGS IN THE SOFTWARE.
 //====================================================================================================================================================
+
 #pragma once
+
+// C++ Includes
 #include <string>
+
+// FRC includes
+
+// Team 302 includes
 #include <mechanisms/base/StateMgr.h>
+#include <mechanisms/example/Example.h>
 #include <mechanisms/StateStruc.h>
 
- 
-class Intake;
-class PrimitiveParams;
+// Third Party Includes
 
-class IntakeStateMgr : public StateMgr
+class ExampleStateMgr : public StateMgr
 {
     public:
         /// @enum the various states of the Intake
-        enum INTAKE_STATE
+        enum EXAMPLE_STATE
         {
-            INTAKE_OFF,
-            INTAKE_ON,
-            INTAKE_EXPEL
+            OFF,
+            FORWARD,
+            REVERSE
+        };
+        const std::string m_exampleOffXmlString = "EXAMPLE_OFF";
+        const std::string m_exampleForwardXmlString = "EXAMPLE_FORWARD";
+        const std::string m_exampleReverseXmlString = "EXAMPLE_REVERSE";
+        
+        const std::map<const std::string, EXAMPLE_STATE> m_exampleXmlStringToStateEnumMap
+        {   {m_exampleOffXmlString, EXAMPLE_STATE::OFF},
+            {m_exampleForwardXmlString, EXAMPLE_STATE::FORWARD},
+            {m_exampleReverseXmlString, EXAMPLE_STATE::REVERSE}
         };
 
-        const std::string m_intakeOffXmlString = "INTAKE_OFF";
-        const std::string m_intakeIntakeXmlString = "INTAKE_ON";
-        const std::string m_intakeExpelXmlString = "INTAKE_EXPEL";
         
-        
-        const std::map<const std::string, INTAKE_STATE> m_intakeXmlStringToStateEnumMap
-        {   {m_intakeOffXmlString, INTAKE_STATE::INTAKE_OFF},
-            {m_intakeIntakeXmlString, INTAKE_STATE::INTAKE_ON},
-            {m_intakeExpelXmlString, INTAKE_STATE::INTAKE_EXPEL}
-        };
-        static IntakeStateMgr* GetInstance();
-        void CheckForStateTransition() override;
+		/// @brief  Find or create the state manmanager
+		static ExampleStateMgr* GetInstance();
 
         /// @brief  Get the current Parameter parm value for the state of this mechanism
         /// @param PrimitiveParams* currentParams current set of primitive parameters
@@ -53,14 +59,16 @@ class IntakeStateMgr : public StateMgr
             PrimitiveParams*    currentParams
         ) override;
 
+        void CheckForStateTransition() override;
     private:
-        IntakeStateMgr();
-        ~IntakeStateMgr() = default;
 
-        Intake*                                m_intake;
+        ExampleStateMgr();
+        ~ExampleStateMgr() = default;
+        
+        Example*                                m_example;
 
-        static IntakeStateMgr*	m_instance;
-        const StateStruc m_offState = {INTAKE_STATE::INTAKE_OFF, m_intakeOffXmlString, StateType::INTAKE_STATE, true};
-        const StateStruc m_onState = {INTAKE_STATE::INTAKE_ON, m_intakeIntakeXmlString, StateType::INTAKE_STATE, false};
-        const StateStruc m_expelState = {INTAKE_STATE::INTAKE_EXPEL, m_intakeExpelXmlString, StateType::INTAKE_STATE, false};
+		static ExampleStateMgr*	m_instance;
+        const StateStruc m_offState = {EXAMPLE_STATE::OFF, m_exampleOffXmlString, StateType::EXAMPLE_STATE, true};
+        const StateStruc m_forwardState = {EXAMPLE_STATE::FORWARD, m_exampleForwardXmlString, StateType::EXAMPLE_STATE, false};
+        const StateStruc m_reverseState = {EXAMPLE_STATE::REVERSE, m_exampleReverseXmlString, StateType::EXAMPLE_STATE, false};
 };

@@ -5,7 +5,7 @@
           type="CTRE"/>
      <pigeon canId="0"
              usage="CENTER_OF_ROTATION"
-             type="pigeon2"
+             type="pigeon1"
              rotation="0.0"/>
      <roborio orientation="X_FORWARD_Y_LEFT"/>
 
@@ -17,16 +17,16 @@
               wheelDiameter="4.0"
               wheelBase="21.0"  
               track="21.0"
-              maxVelocity="2.5"
+              maxVelocity="1.0"
               maxAngularVelocity="1"
-              maxAcceleration="2.0"
+              maxAcceleration="1"
               maxAngularAcceleration="1"
               networkTable="ChassisNT"
               controlFile="chassis.xml">
 			 
             <motor  usage="MECANUM_LEFT_FRONT"
-                    canId="15"
-                    pdpID="15"
+                    canId="7"
+                    pdpID="7"
                     type="TALONSRX"
                     inverted="true"
                     sensorInverted="false"
@@ -46,8 +46,8 @@
                     reverselimitswitch="false"
                     reverselimitswitchopen="true"/>                  
              <motor  usage="MECANUM_LEFT_BACK"
-                    canId="14"
-                    pdpID="14"
+                    canId="5"
+                    pdpID="5"
                     type="TALONSRX"
                     inverted="true"
                     sensorInverted="false"
@@ -68,8 +68,8 @@
                     reverselimitswitchopen="true"/>        
   			 
             <motor  usage="MECANUM_RIGHT_FRONT"
-                    canId="1"
-                    pdpID="1"
+                    canId="8"
+                    pdpID="8"
                     type="TALONSRX"
                     inverted="false"
                     sensorInverted="false"
@@ -89,8 +89,8 @@
                     reverselimitswitch="false"
                     reverselimitswitchopen="true"/>                  
              <motor  usage="MECANUM_RIGHT_BACK"
-                    canId="3"
-                    pdpID="3"
+                    canId="9"
+                    pdpID="9"
                     type="TALONSRX"
                     inverted="false"
                     sensorInverted="false"
@@ -118,9 +118,9 @@
                networkTable="IntakeNT" 
                controlFile="intake.xml"> 
           <motor usage="INTAKE" 
-                 canId="2" 
-                 pdpID="2" 
-                 type="BRUSHLESS_SPARK_MAX" 
+                 canId="6" 
+                 pdpID="6" 
+                 type="TALONSRX" 
                  inverted="true" 
                  sensorInverted="false" 
                  feedbackDevice="NONE" 
@@ -132,17 +132,18 @@
                  peakCurrentLimit="50" 
                  currentLimiting="true"/>
      </mechanism>
+
 <!-- ====================================================
-     Conveyer
+     Arm
      ====================================================  -->
-     <mechanism type= "CONVEYOR"
-               networkTable="ConveyerNT"
-               controlFile="conveyor.xml">
-          <motor usage="CONVEYOR"
-                 canId="0"
-                 pdpID="0"
+     <mechanism type= "ARM"
+               networkTable="ArmNT"
+               controlFile="arm.xml">
+          <motor usage="ARM"
+                 canId="10"
+                 pdpID="10"
                  type="TALONSRX"
-                 inverted="false"
+                 inverted="true"
                  sensorInverted="false"
                  feedbackDevice="NONE" 
                  countsPerRev="0" 
@@ -160,29 +161,21 @@
      </mechanism>
 
 <!-- ====================================================
-     Ball Delivery
+     Ball Release
      ====================================================  -->
-     <mechanism type= "DELIVERY"
-                networkTable="BallDelivery"
-                controlFile="delivery.xml">
-          <motor usage="DELIVERY"
-                 canId="13"
-                 pdpID="13"
-                 type="TALONSRX"
-                 inverted="false"
-                 sensorInverted="false"
-                 feedbackDevice="NONE" 
-                 countsPerRev="0" 
-                 gearRatio="1.0" 
-                 brakeMode="true" 
-                 peakCurrentDuration="50" 
-                 continuousCurrentLimit="50" 
-                 peakCurrentLimit="50" 
-                 currentLimiting="true"              
-                 forwardlimitswitch="true" 
-                 forwardlimitswitchopen="true" 
-                 reverselimitswitch="true" 
-                 reverselimitswitchopen="true"/> 
+     <mechanism type= "RELEASE"
+                networkTable="BallReleaseNT"
+                controlFile="release.xml">
+          <servo usage="RELEASE_SERVO"
+                 pwmId="0"
+                 minAngle="0.0"
+                 maxAngle="360.0"
+                 pwmId="0"/>
+          <servo usage="RELEASE_SERVO2"
+                 pwmId="1"
+                 minAngle="0.0"
+                 maxAngle="360.0"
+                 pwmId="1"/>
      </mechanism>
 
 <!-- ====================================================
