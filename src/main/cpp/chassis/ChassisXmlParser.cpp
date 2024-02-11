@@ -76,9 +76,6 @@ IChassis* ChassisXmlParser::ParseXML
     string networkTableName;
     string controlFileName;
 
-    //ChassisSpeedCalcEnum speedCalcOption = ChassisSpeedCalcEnum::ETHER;
-    //PoseEstimatorEnum poseEstOption   = PoseEstimatorEnum::EULER_AT_CHASSIS;
-
     bool hasError = false;
 
     // process attributes
