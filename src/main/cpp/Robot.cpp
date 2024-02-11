@@ -32,7 +32,7 @@ void Robot::RobotInit()
     
     m_controller = TeleopControl::GetInstance();
 
-    // Read the XML file to build the robot 
+    // // Read the XML file to build the robot 
     auto XmlParser = new RobotXmlParser();
     XmlParser->ParseXML();
 
@@ -62,10 +62,10 @@ void Robot::RobotInit()
  */
 void Robot::RobotPeriodic() 
 {
-//    if (m_chassis != nullptr)
-//    {
-//        m_chassis->UpdateOdometry();
-//   }
+   if (m_chassis != nullptr)
+   {
+       m_chassis->UpdateOdometry();
+  }
 
     if (m_startLogging)
     {
