@@ -14,13 +14,13 @@
      ====================================================  -->
 <!-- -->
        <chassis  type="MECANUM"
-              wheelDiameter="4.0"
               wheelBase="21.0"  
               track="21.0"
               maxVelocity="1.0"
-              maxAngularVelocity="1"
-              maxAcceleration="1"
-              maxAngularAcceleration="1"
+              maxAngularVelocity="1.0"
+              maxAcceleration="1.0"
+              maxAngularAcceleration="1.0"
+              wheelDiameter="4.0"
               networkTable="ChassisNT"
               controlFile="chassis.xml">
 			 

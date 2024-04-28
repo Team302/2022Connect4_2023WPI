@@ -32,7 +32,7 @@ void Robot::RobotInit()
     
     m_controller = TeleopControl::GetInstance();
 
-    // // Read the XML file to build the robot 
+    // Read the XML file to build the robot 
     auto XmlParser = new RobotXmlParser();
     XmlParser->ParseXML();
 
