@@ -25,7 +25,6 @@
 //#include <chassis/differential/DifferentialChassis.h>
 #include <chassis/mecanum/MecanumChassis.h>
 #include <chassis/IChassis.h>
-#include <hw/DragonCanCoder.h>
 #include <hw/interfaces/IDragonMotorController.h>
 #include <hw/usages/IDragonMotorControllerMap.h>
 #include <utils/Logger.h>
@@ -42,10 +41,12 @@ ChassisFactory* ChassisFactory::GetChassisFactory()
     return ChassisFactory::m_chassisFactory;
 }
 
+//were doing somthing wrong when we create the chassis from the xml, specifically with the motors.
+
 //=======================================================================================
 // Method:  		CreateChassis
 // Description:		Create a chassis from the inputs
-// Returns:         Void
+// Returns:         A Pointer to the Chassis
 //=======================================================================================
 IChassis* ChassisFactory::CreateChassis
 (
@@ -115,6 +116,7 @@ shared_ptr<IDragonMotorController> ChassisFactory::GetMotorController
 	if ( it != motorControllers.end() )  // found it
 	{
 		motor = it->second;
+        Logger::GetLogger()->LogData(LOGGER_LEVEL::ERROR, string( "ChassisFactory" ), string( "GetMotorController" ), string("motor found") );
 	}
 	else
 	{

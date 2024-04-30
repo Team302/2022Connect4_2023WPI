@@ -23,7 +23,6 @@
               wheelDiameter="4.0"
               networkTable="ChassisNT"
               controlFile="chassis.xml">
-			 
             <motor  usage="MECANUM_LEFT_FRONT"
                     canId="7"
                     pdpID="7"
@@ -45,7 +44,7 @@
                     forwardlimitswitchopen="true"
                     reverselimitswitch="false"
                     reverselimitswitchopen="true"/>                  
-             <motor  usage="MECANUM_LEFT_BACK"
+            <motor  usage="MECANUM_LEFT_BACK"
                     canId="5"
                     pdpID="5"
                     type="TALONSRX"
@@ -65,8 +64,7 @@
                     forwardlimitswitch="false"
                     forwardlimitswitchopen="true"
                     reverselimitswitch="false"
-                    reverselimitswitchopen="true"/>        
-  			 
+                    reverselimitswitchopen="true"/>
             <motor  usage="MECANUM_RIGHT_FRONT"
                     canId="8"
                     pdpID="8"
@@ -88,7 +86,7 @@
                     forwardlimitswitchopen="true"
                     reverselimitswitch="false"
                     reverselimitswitchopen="true"/>                  
-             <motor  usage="MECANUM_RIGHT_BACK"
+            <motor  usage="MECANUM_RIGHT_BACK"
                     canId="9"
                     pdpID="9"
                     type="TALONSRX"
