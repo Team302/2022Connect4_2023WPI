@@ -79,76 +79,88 @@ IChassis* ChassisXmlParser::ParseXML
     bool hasError = false;
 
     // process attributes
+    //This for loop is causing the motor saftey error, not somthing within the loop, because everything inside is commented
+    //must be what we are checking in the statement, but why is this causing loop overrun in teleop?
     for (xml_attribute attr = chassisNode.first_attribute(); attr && !hasError; attr = attr.next_attribute())
     {
-        string attrName (attr.name());
-        if ( attrName.compare("type") == 0 )
-        {
-            auto val = string( attr.value() );
-            if ( val.compare( "MECANUM") == 0 )
-            {
-                type = ChassisFactory::CHASSIS_TYPE::MECANUM_CHASSIS;
-            }
-            else if ( val.compare( "TANK" ) == 0 )
-            {
-                type = ChassisFactory::CHASSIS_TYPE::TANK_CHASSIS;
-            }
-            else if (val.compare("SWERVE") == 0)
-            {
-                type = ChassisFactory::CHASSIS_TYPE::SWERVE_CHASSIS;
-            }
-            else
-            {
-                string msg = "Unknown Chassis Type";
-                msg += attr.value();
-                Logger::GetLogger()->LogData(LOGGER_LEVEL::ERROR_ONCE, string("ChasssiXmlParser"), string( "ParseXML" ), msg );
-            }
-        }
-        else if (  attrName.compare("wheelBase") == 0 )
-        {
-        	wheelBase = units::length::inch_t(attr.as_double());
-        }
-        else if (  attrName.compare("track") == 0 )
-        {
-        	track = units::length::inch_t(attr.as_double());
-        }
-        else if (  attrName.compare("maxVelocity") == 0 )
-        {
-            units::velocity::feet_per_second_t fps(attr.as_double()/12.0);
-        	maxVelocity = units::velocity::meters_per_second_t(fps);
-        }
-        else if (  attrName.compare("maxAngularVelocity") == 0 )
-        {
-            units::degrees_per_second_t degreesPerSec(attr.as_double());
-        	maxAngularSpeed = units::radians_per_second_t(degreesPerSec);
-        }
-        else if (  attrName.compare("maxAcceleration") == 0 )
-        {
-            maxAcceleration = units::feet_per_second_t(attr.as_double()/12.0) / 1_s;
-        }
-        else if (  attrName.compare("maxAngularAcceleration") == 0 )
-        {
-            maxAngularAcceleration = units::degrees_per_second_t(attr.as_double()) / 1_s;
-        }
-        else if (  attrName.compare("wheelDiameter") == 0 )
-        {
-        	wheelDiameter = units::length::inch_t(attr.as_double());
-        }
-        else if (attrName.compare("networkTable") == 0)
-        {
-            networkTableName = attr.as_string();
-        }
-        else if (attrName.compare("controlFile") == 0)
-        {
-            controlFileName = attr.as_string();
-        }
-        else   // log errors
-        {
-            string msg = "unknown attribute ";
-            msg += attr.name();
-            Logger::GetLogger()->LogData(LOGGER_LEVEL::ERROR_ONCE, string("ChassisXmlParser"), string("ParseXML"), msg );
-            hasError = true;
-        }
+        // string attrName (attr.name());
+        // if ( attrName.compare("type") == 0 )
+        // {
+        //     // auto val = string( attr.value() );
+        //     // if ( val.compare( "MECANUM") == 0 )
+        //     // {
+        //     //     type = ChassisFactory::CHASSIS_TYPE::MECANUM_CHASSIS;
+        //     // }
+        //     // else if ( val.compare( "TANK" ) == 0 )
+        //     // {
+        //     //     type = ChassisFactory::CHASSIS_TYPE::TANK_CHASSIS;
+        //     // }
+        //     // else if (val.compare("SWERVE") == 0)
+        //     // {
+        //     //     type = ChassisFactory::CHASSIS_TYPE::SWERVE_CHASSIS;
+        //     // }
+        //     // else
+        //     // {
+        //     //     string msg = "Unknown Chassis Type";
+        //     //     msg += attr.value();
+        //     //     Logger::GetLogger()->LogData(LOGGER_LEVEL::ERROR_ONCE, string("ChasssiXmlParser"), string( "ParseXML" ), msg );
+        //     // }
+        //     type = ChassisFactory::CHASSIS_TYPE::MECANUM_CHASSIS;
+        // }
+    //     else if (  attrName.compare("wheelBase") == 0 )
+    //     {
+    //     	//wheelBase = units::length::inch_t(attr.as_double());
+    //         wheelBase = units::length::inch_t(4.0);
+    //     }
+    //     else if (  attrName.compare("track") == 0 )
+    //     {
+    //     	// track = units::length::inch_t(attr.as_double());
+    //         track = units::length::inch_t(0.0);
+    //     }
+    //     else if (  attrName.compare("maxVelocity") == 0 )
+    //     {
+    //         // units::velocity::feet_per_second_t fps(attr.as_double()/12.0);
+    //     	// maxVelocity = units::velocity::meters_per_second_t(fps);
+    //         maxVelocity = units::velocity::meters_per_second_t(0.0);
+    //     }
+    //     else if (  attrName.compare("maxAngularVelocity") == 0 )
+    //     {
+    //         // units::degrees_per_second_t degreesPerSec(attr.as_double());
+    //     	// maxAngularSpeed = units::radians_per_second_t(degreesPerSec);
+    //         maxAngularSpeed = units::radians_per_second_t(0.0);
+    //     }
+    //     else if (  attrName.compare("maxAcceleration") == 0 )
+    //     {
+    //         //maxAcceleration = units::feet_per_second_t(attr.as_double()/12.0) / 1_s;
+    //         //maxAcceleration = units::feet_per_second_t(0.0);
+    //     }
+    //     else if (  attrName.compare("maxAngularAcceleration") == 0 )
+    //     {
+    //         //maxAngularAcceleration = units::degrees_per_second_t(attr.as_double()) / 1_s;
+    //         maxAngularAcceleration = units::degrees_per_second_squared_t(0.0);
+    //     }
+    //     else if (  attrName.compare("wheelDiameter") == 0 )
+    //     {
+    //     	// wheelDiameter = units::length::inch_t(attr.as_double());
+    //         wheelDiameter = units::length::inch_t(0.0);
+    //     }
+    //     else if (attrName.compare("networkTable") == 0)
+    //     {
+    //         // networkTableName = attr.as_string();
+    //         networkTableName = std::string("");
+    //     }
+    //     else if (attrName.compare("controlFile") == 0)
+    //     {
+    //         // controlFileName = attr.as_string();
+    //         controlFileName = std::string("");
+    //     }
+    //     else   // log errors
+    //     {
+    //         // string msg = "unknown attribute ";
+    //         // msg += attr.name();
+    //         // Logger::GetLogger()->LogData(LOGGER_LEVEL::ERROR_ONCE, string("ChassisXmlParser"), string("ParseXML"), msg );
+    //         // hasError = true;
+    //     }
     }
 
 

@@ -20,6 +20,7 @@
 //Team 302 includes
 #include <TeleopControl.h>
 #include <State.h>
+#include <frc/smartdashboard/SendableChooser.h>
 
 class IChassis;
 class IHolonomicChassis;
@@ -37,8 +38,16 @@ class HolonomicDrive : public State
         bool AtTarget() const override;
 
     private:
+        enum DRIVE_SPEED
+        {
+            SLOW,
+            LIGHT_SPEED,
+            RIDICULOUS_SPEED,
+            LUDICROUS_SPEED
+        };
         inline TeleopControl* GetController() const { return m_controller; }
         IChassis*                           m_chassis;
         IHolonomicChassis*                  m_holonomicChassis;
         TeleopControl*                      m_controller;
+        frc::SendableChooser<DRIVE_SPEED>   m_speedChooser;
 };
