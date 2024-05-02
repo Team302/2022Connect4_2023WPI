@@ -94,7 +94,7 @@ class MecanumChassis : public IChassis , public IHolonomicChassis
         std::shared_ptr<IDragonMotorController>         m_leftBackMotor;
         std::shared_ptr<IDragonMotorController>         m_rightFrontMotor;
         std::shared_ptr<IDragonMotorController>         m_rightBackMotor;
-        DragonPigeon*                                   m_pigeon;
+        // DragonPigeon*                                   m_pigeon;
 
         units::velocity::meters_per_second_t            m_maxSpeed;
         units::angular_velocity::degrees_per_second_t   m_maxAngSpeed;
