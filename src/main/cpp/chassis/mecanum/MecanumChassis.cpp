@@ -55,11 +55,12 @@ MecanumChassis::MecanumChassis
     units::angular_velocity::degrees_per_second_t  maxAngSpeed,
     units::length::inch_t                          wheelDiameter,
     string                                         networktablename
-) : m_drive(new MecanumDrive
-    (*(leftFrontMotor.get()->GetSpeedController().get()), 
-    *(leftBackMotor.get()->GetSpeedController().get()), 
-    *(rightFrontMotor.get()->GetSpeedController().get()), 
-    *(rightBackMotor.get()->GetSpeedController().get()))),
+):
+// ) : m_drive(new MecanumDrive
+//     (*(leftFrontMotor.get()->GetSpeedController().get()), 
+//     *(leftBackMotor.get()->GetSpeedController().get()), 
+//     *(rightFrontMotor.get()->GetSpeedController().get()), 
+//     *(rightBackMotor.get()->GetSpeedController().get()))),
     m_leftFrontMotor(leftFrontMotor),
     m_leftBackMotor(leftBackMotor),
     m_rightFrontMotor(rightFrontMotor),
