@@ -36,6 +36,10 @@
 #include <chassis/IHolonomicChassis.h>
 
 // @ADDMECH include for your mechanism state
+#include <mechanisms/intake/IntakeStateManager.h>
+#include <mechanisms/ARM/ArmStateMgr.h>
+#include <mechanisms/release/ReleaseStateMgr.h>
+#include <mechanisms/flagarm/FlagArmStateManager.h>
 
 
 // Third Party Includes
@@ -133,8 +137,12 @@ void CyclePrimitives::RunDriveStop()
 		                                   0.0,                 // heading
 		                                   0.0,                 // start drive speed
 		                                   0.0,					// end drive speed
-										   std::string()
+										   std::string(),
 										  // @ADDMECH mechanism state
+										   IntakeStateMgr::INTAKE_STATE::INTAKE_OFF,
+										   ArmStateMgr::ARM_STATE::OFF,
+										   ReleaseStateMgr::RELEASE_STATE::OPEN_OPEN,
+										   FlagArmStateManager::FLAG_ARM_STATE::GRABBER_OPEN
 										 );             
 		m_DriveStop = m_primFactory->GetIPrimitive(params);
 		m_DriveStop->Init(params);

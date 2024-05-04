@@ -65,7 +65,7 @@ IChassis* ChassisXmlParser::ParseXML
 {
     IChassis* chassis = nullptr;
     // initialize the attributes to the default values
-    ChassisFactory::CHASSIS_TYPE type = ChassisFactory::CHASSIS_TYPE::TANK_CHASSIS;
+    ChassisFactory::CHASSIS_TYPE type = ChassisFactory::CHASSIS_TYPE::MECANUM_CHASSIS;
     units::length::inch_t wheelDiameter(0.0);
     units::length::inch_t wheelBase(0.0);
     units::length::inch_t track(0.0);
@@ -76,36 +76,34 @@ IChassis* ChassisXmlParser::ParseXML
     string networkTableName;
     string controlFileName;
 
-    //ChassisSpeedCalcEnum speedCalcOption = ChassisSpeedCalcEnum::ETHER;
-    //PoseEstimatorEnum poseEstOption   = PoseEstimatorEnum::EULER_AT_CHASSIS;
-
     bool hasError = false;
 
     // process attributes
     for (xml_attribute attr = chassisNode.first_attribute(); attr && !hasError; attr = attr.next_attribute())
     {
         string attrName (attr.name());
-        if ( attrName.compare("type") == 0 )
+        if (attrName.compare("type") == 0)
         {
             auto val = string( attr.value() );
-            if ( val.compare( "MECANUM") == 0 )
-            {
-                type = ChassisFactory::CHASSIS_TYPE::MECANUM_CHASSIS;
-            }
-            else if ( val.compare( "TANK" ) == 0 )
-            {
-                type = ChassisFactory::CHASSIS_TYPE::TANK_CHASSIS;
-            }
-            else if (val.compare("SWERVE") == 0)
-            {
-                type = ChassisFactory::CHASSIS_TYPE::SWERVE_CHASSIS;
-            }
-            else
-            {
-                string msg = "Unknown Chassis Type";
-                msg += attr.value();
-                Logger::GetLogger()->LogData(LOGGER_LEVEL::ERROR_ONCE, string("ChasssiXmlParser"), string( "ParseXML" ), msg );
-            }
+            // if ( val.compare( "MECANUM") == 0 )
+            // {
+            //     type = ChassisFactory::CHASSIS_TYPE::MECANUM_CHASSIS;
+            // }
+            // else if ( val.compare( "TANK" ) == 0 )
+            // {
+            //     type = ChassisFactory::CHASSIS_TYPE::TANK_CHASSIS;
+            // }
+            // else if (val.compare("SWERVE") == 0)
+            // {
+            //     type = ChassisFactory::CHASSIS_TYPE::SWERVE_CHASSIS;
+            // }
+            // else
+            // {
+            //     string msg = "Unknown Chassis Type";
+            //     msg += attr.value();
+            //     Logger::GetLogger()->LogData(LOGGER_LEVEL::ERROR_ONCE, string("ChasssiXmlParser"), string( "ParseXML" ), msg );
+            // }
+            // type = ChassisFactory::CHASSIS_TYPE::MECANUM_CHASSIS;
         }
         else if (  attrName.compare("wheelBase") == 0 )
         {

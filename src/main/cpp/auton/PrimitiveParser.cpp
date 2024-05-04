@@ -25,6 +25,10 @@
 #include <auton/drivePrimitives/IPrimitive.h>
 #include <utils/Logger.h>
 // @ADDMECH include for your mechanism state
+#include <mechanisms/intake/IntakeStateManager.h>
+#include <mechanisms/ARM/ArmStateMgr.h>
+#include <mechanisms/release/ReleaseStateMgr.h>
+#include <mechanisms/flagarm/FlagArmStateManager.h>
 
 #include <pugixml/pugixml.hpp>
 
@@ -90,6 +94,10 @@ PrimitiveParamsVector PrimitiveParser::ParseXML
                     auto yloc = 0.0;
                     std::string pathName;
                     // @ADDMECH Initialize your mechanism state
+                    auto intakeState = IntakeStateMgr::INTAKE_STATE::INTAKE_OFF;
+                    auto armState = ArmStateMgr::ARM_STATE::DOWN;
+                    auto releaseState = ReleaseStateMgr::RELEASE_STATE::CLOSED_CLOSED;
+                    auto flagArmState = FlagArmStateManager::FLAG_ARM_STATE::GRABBER_OPEN;
                     
                     for (xml_attribute attr = primitiveNode.first_attribute(); attr; attr = attr.next_attribute())
                     {
@@ -152,7 +160,58 @@ PrimitiveParamsVector PrimitiveParser::ParseXML
                             pathName = attr.value();
                         }                
                         // @ADDMECH add case for your mechanism state to get the statemgr / state
-
+                        else if ( strcmp( attr.name(), "intake" ) == 0 )
+                        {
+                            auto itr = IntakeStateMgr::GetInstance()->m_intakeXmlStringToStateEnumMap.find(attr.value());
+                            if (itr != IntakeStateMgr::GetInstance()->m_intakeXmlStringToStateEnumMap.end())
+                            {
+                                intakeState = itr->second;
+                            }
+                            else
+                            {
+                                Logger::GetLogger()->LogData(LOGGER_LEVEL::ERROR, string("PrimitiveParser"), string("invalid intake state"), attr.value());
+                                hasError = true;
+                            }
+                        }
+                        else if ( strcmp( attr.name(), "arm" ) == 0 )
+                        {
+                            auto itr = ArmStateMgr::GetInstance()->m_armXmlStringToStateEnumMap.find(attr.value());
+                            if (itr != ArmStateMgr::GetInstance()->m_armXmlStringToStateEnumMap.end())
+                            {
+                                armState = itr->second;
+                            }
+                            else
+                            {
+                                Logger::GetLogger()->LogData(LOGGER_LEVEL::ERROR, string("PrimitiveParser"), string("invalid arm state"), attr.value());
+                                hasError = true;
+                            }
+                        }                        
+                        else if ( strcmp( attr.name(), "release" ) == 0 )
+                        {
+                            auto itr = ReleaseStateMgr::GetInstance()->m_releaseXmlStringToStateEnumMap.find(attr.value());
+                            if (itr != ReleaseStateMgr::GetInstance()->m_releaseXmlStringToStateEnumMap.end())
+                            {
+                                releaseState = itr->second;
+                            }
+                            else
+                            {
+                                Logger::GetLogger()->LogData(LOGGER_LEVEL::ERROR, string("PrimitiveParser"), string("invalid release state"), attr.value());
+                                hasError = true;
+                            }
+                        }
+                        else if ( strcmp( attr.name(), "flagarm" ) == 0 )
+                        {
+                            auto itr = FlagArmStateManager::GetInstance()->m_FlagXmlStringToStateEnumMap.find(attr.value());
+                            if (itr != FlagArmStateManager::GetInstance()->m_FlagXmlStringToStateEnumMap.end())
+                            {
+                                flagArmState = itr->second;
+                            }
+                            else
+                            {
+                                Logger::GetLogger()->LogData(LOGGER_LEVEL::ERROR, string("PrimitiveParser"), string("invalid flag arm state"), attr.value());
+                                hasError = true;
+                            }
+                        }
                         else
                         {
                             Logger::GetLogger()->LogData(LOGGER_LEVEL::ERROR, string("PrimitiveParser"), string("ParseXML invalid attribute"), attr.name());
@@ -170,8 +229,12 @@ PrimitiveParamsVector PrimitiveParser::ParseXML
                                                                        heading,
                                                                        startDriveSpeed,
                                                                        endDriveSpeed,
-                                                                       pathName
+                                                                       pathName,
                                                                        // @ADDMECH add parameter for your mechanism state
+                                                                       intakeState,
+                                                                       armState,
+                                                                       releaseState,
+                                                                       flagArmState
                                                                        ) );
                         string ntName = string("Primitive ") + to_string(paramVector.size());
                         int slot = paramVector.size() - 1;
@@ -188,6 +251,10 @@ PrimitiveParamsVector PrimitiveParser::ParseXML
                         logger->LogData(LOGGER_LEVEL::PRINT, ntName, string("End Drive Speed"), param->GetEndDriveSpeed());
                         logger->LogData(LOGGER_LEVEL::PRINT, ntName, string("Path Name"), param->GetPathName());
                         // @ADDMECH Log state data
+                        logger->LogData(LOGGER_LEVEL::PRINT, ntName, string("intake state"), param->GetIntakeState());
+                        logger->LogData(LOGGER_LEVEL::PRINT, ntName, string("arm state"), param->GetArmState());
+                        logger->LogData(LOGGER_LEVEL::PRINT, ntName, string("release state"), param->GetReleaseState());
+                        logger->LogData(LOGGER_LEVEL::PRINT, ntName, string("flag arm state"), param->GetLFlagArmState());
                     }
                     else 
                     {

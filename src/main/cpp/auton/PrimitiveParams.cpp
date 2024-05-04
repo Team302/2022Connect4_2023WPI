@@ -19,6 +19,10 @@
 #include <chassis/IChassis.h>
 #include <chassis/IHolonomicChassis.h>
 // @ADDMECH include for your mechanism state mgr
+#include <mechanisms/ARM/ArmStateMgr.h>
+#include <mechanisms/intake/IntakeStateManager.h>
+#include <mechanisms/release/ReleaseStateMgr.h>
+#include <mechanisms/flagarm/FlagArmStateManager.h>
 
 
 
@@ -33,8 +37,12 @@ PrimitiveParams::PrimitiveParams
     float                       						heading,
     float                       						startDriveSpeed,
     float                       						endDriveSpeed,
-	std::string											pathName
+	std::string											pathName,
 	// @ADDMECH mechanism state for mech as parameter
+	IntakeStateMgr::INTAKE_STATE                        intakeState,
+	ArmStateMgr::ARM_STATE                              armState,
+	ReleaseStateMgr::RELEASE_STATE                      releaseState,
+	FlagArmStateManager::FLAG_ARM_STATE                 flagArmState
 ):	//Pass over parameters to class variables
 		m_id(id), //Primitive ID
 		m_time(time),
@@ -45,8 +53,12 @@ PrimitiveParams::PrimitiveParams
 		m_heading(heading),
 		m_startDriveSpeed(startDriveSpeed),
 		m_endDriveSpeed(endDriveSpeed),
-		m_pathName (pathName) 
+		m_pathName (pathName),
 		// @ADDMECH initilize state mgr attribute
+		m_intakeState(intakeState),
+		m_armState(armState),
+		m_releaseState(releaseState),
+		m_flagArmState(flagArmState)
 {
 }
 

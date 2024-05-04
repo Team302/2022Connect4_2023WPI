@@ -116,30 +116,27 @@ void TeleopControl::Initialize()
 		m_controllerIndex[ HOLONOMIC_DRIVE_ROTATE]			= ctrlNo;
 		m_axisIDs[HOLONOMIC_DRIVE_ROTATE]					= IDragonGamePad::RIGHT_JOYSTICK_X;
 
-		m_controllerIndex[INTAKE_BALLS] 					= ctrlNo;  
-		m_buttonIDs[INTAKE_BALLS]	 						= IDragonGamePad::RIGHT_BUMPER;	
-		m_controllerIndex[EXPEL_BALLS]						= ctrlNo;
-		m_buttonIDs[EXPEL_BALLS]							= IDragonGamePad::LEFT_BUMPER;
-		m_controllerIndex[DELIVER_BALLS]					= ctrlNo;
-		m_buttonIDs[DELIVER_BALLS]							= IDragonGamePad::Y_BUTTON;
-		
+		m_controllerIndex[INTAKE_EXPEL] 					= ctrlNo;  
+		m_buttonIDs[INTAKE_EXPEL]	 						= IDragonGamePad::LEFT_BUMPER;	
+		m_controllerIndex[INTAKE_ON]						= ctrlNo;
+		m_buttonIDs[INTAKE_ON]								= IDragonGamePad::RIGHT_BUMPER;
 
-		// m_controllerIndex[ REZERO_PIGEON ]					= ctrlNo;
-		// m_buttonIDs[ REZERO_PIGEON ]						= IDragonGamePad::Y_BUTTON;
-		// m_controllerIndex[ RELEASE_OPEN_OPEN ]				= ctrlNo;
-		// m_buttonIDs[ RELEASE_OPEN_OPEN ]					= IDragonGamePad::B_BUTTON;
-		// m_controllerIndex[RELEASE_OPEN_CLOSED]				= ctrlNo;
-		// m_buttonIDs[RELEASE_OPEN_CLOSED]					= IDragonGamePad::X_BUTTON;
+		m_controllerIndex[ REZERO_PIGEON ]					= ctrlNo;
+		m_buttonIDs[ REZERO_PIGEON ]						= IDragonGamePad::Y_BUTTON;
+		m_controllerIndex[ RELEASE_OPEN_OPEN ]				= ctrlNo;
+		m_buttonIDs[ RELEASE_OPEN_OPEN ]					= IDragonGamePad::B_BUTTON;
+		m_controllerIndex[RELEASE_OPEN_CLOSED]				= ctrlNo;
+		m_buttonIDs[RELEASE_OPEN_CLOSED]					= IDragonGamePad::X_BUTTON;
 
-		// //m_controllerIndex[ARM_GOING_UP]						= ctrlNo;
-		// //m_buttonIDs[ARM_GOING_UP]							= IDragonGamePad::POV_0;
-		// //m_controllerIndex[ARM_GOING_DOWN]					= ctrlNo;
-		// //m_buttonIDs[ARM_GOING_DOWN]							= IDragonGamePad::POV_180;
+		//m_controllerIndex[ARM_GOING_UP]						= ctrlNo;
+		//m_buttonIDs[ARM_GOING_UP]							= IDragonGamePad::POV_0;
+		//m_controllerIndex[ARM_GOING_DOWN]					= ctrlNo;
+		//m_buttonIDs[ARM_GOING_DOWN]							= IDragonGamePad::POV_180;
 
-		// m_controllerIndex[ARM_GOING_UP]						= ctrlNo;
-		// m_buttonIDs[ARM_GOING_UP]							= IDragonGamePad::BUTTON_IDENTIFIER::RIGHT_TRIGGER_PRESSED;
-		// m_controllerIndex[ARM_GOING_DOWN]					= ctrlNo;
-		// m_buttonIDs[ARM_GOING_DOWN]							= IDragonGamePad::BUTTON_IDENTIFIER::LEFT_TRIGGER_PRESSED;
+		m_controllerIndex[ARM_GOING_UP]						= ctrlNo;
+		m_buttonIDs[ARM_GOING_UP]							= IDragonGamePad::BUTTON_IDENTIFIER::RIGHT_TRIGGER_PRESSED;
+		m_controllerIndex[ARM_GOING_DOWN]					= ctrlNo;
+		m_buttonIDs[ARM_GOING_DOWN]							= IDragonGamePad::BUTTON_IDENTIFIER::LEFT_TRIGGER_PRESSED;
 
 	
     }
@@ -151,7 +148,11 @@ void TeleopControl::Initialize()
     ctrlNo = 1;
     if ( m_controller[ctrlNo] != nullptr && DriverStation::GetJoystickIsXbox(ctrlNo) )
     {
-
+        Logger::GetLogger()->LogData(LOGGER_LEVEL::PRINT, string("TeleopControl"), string("Controller 1"), string("XBOIX controller plugged in"));
+		m_controllerIndex[ EXAMPLE_FORWARD ]	= ctrlNo;
+		m_buttonIDs[ EXAMPLE_FORWARD ]			= IDragonGamePad::A_BUTTON;
+		m_controllerIndex[ EXAMPLE_REVERSE ]	= ctrlNo;
+		m_buttonIDs[ EXAMPLE_REVERSE ]			= IDragonGamePad::B_BUTTON;
 	}
     else if ( m_controller[ctrlNo] != nullptr )
     {

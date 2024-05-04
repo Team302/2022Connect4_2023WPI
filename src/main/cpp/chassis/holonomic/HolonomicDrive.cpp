@@ -33,6 +33,10 @@
 #include <chassis/ChassisFactory.h>
 #include <hw/factories/PigeonFactory.h>
 #include <utils/Logger.h>
+#include <frc/SmartDashboard/SmartDashboard.h>
+#include <networktables/NetworkTableInstance.h>
+#include <networktables/NetworkTable.h>
+
 
 using namespace std;
 using namespace frc;
@@ -72,6 +76,12 @@ void HolonomicDrive::Init()
         controller->SetAxisProfile(TeleopControl::FUNCTION_IDENTIFIER::HOLONOMIC_DRIVE_ROTATE, IDragonGamePad::AXIS_PROFILE::CUBED);
         controller->SetDeadBand(TeleopControl::FUNCTION_IDENTIFIER::HOLONOMIC_DRIVE_ROTATE, IDragonGamePad::AXIS_DEADBAND::APPLY_STANDARD_DEADBAND);
         controller->SetAxisScaleFactor(TeleopControl::FUNCTION_IDENTIFIER::HOLONOMIC_DRIVE_ROTATE, 0.7);
+
+        m_speedChooser.SetDefaultOption("Slow", DRIVE_SPEED::SLOW);
+        m_speedChooser.AddOption("Light Speed", DRIVE_SPEED::LIGHT_SPEED);
+        m_speedChooser.AddOption("Ridiculous Speed", DRIVE_SPEED::RIDICULOUS_SPEED);
+        m_speedChooser.AddOption("Ludicrous Speed", DRIVE_SPEED::LUDICROUS_SPEED);
+        frc::SmartDashboard::PutData("SpeedChooser", &m_speedChooser);
     }
 }
 
@@ -79,6 +89,22 @@ void HolonomicDrive::Init()
 /// @return void
 void HolonomicDrive::Run()
 {
+    double speedMultiplier = 0.0;
+    switch (m_speedChooser.GetSelected())
+    {
+    case DRIVE_SPEED::SLOW:
+        speedMultiplier = 0.25;
+        break;
+    case DRIVE_SPEED::LIGHT_SPEED:
+        speedMultiplier = 1.0;
+        break;
+    case DRIVE_SPEED::RIDICULOUS_SPEED:
+        speedMultiplier = 1.5;
+        break;
+    case DRIVE_SPEED::LUDICROUS_SPEED:
+        speedMultiplier = 2.0;
+        break;
+    }
     auto controller = GetController();
     if (controller != nullptr && m_holonomicChassis != nullptr && m_chassis != nullptr)
     {
@@ -93,7 +119,7 @@ void HolonomicDrive::Run()
         auto maxSpeed = m_chassis->GetMaxSpeed();
         auto maxAngSpeed = m_holonomicChassis->GetMaxAngularSpeed();
 
-        ChassisSpeeds speeds{forward*maxSpeed, strafe*maxSpeed, rotate*maxAngSpeed};
+        ChassisSpeeds speeds{forward*maxSpeed*speedMultiplier, strafe*maxSpeed*speedMultiplier, rotate*maxAngSpeed*speedMultiplier};
         
         Logger::GetLogger()->LogData(LOGGER_LEVEL::PRINT, string("HolonomicDrive"), string("Speeds.Vx"), speeds.vx.value());
         Logger::GetLogger()->LogData(LOGGER_LEVEL::PRINT, string("HolonomicDrive"), string("Speeds.Vy"), speeds.vy.value());

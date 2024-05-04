@@ -55,15 +55,17 @@ MecanumChassis::MecanumChassis
     units::angular_velocity::degrees_per_second_t  maxAngSpeed,
     units::length::inch_t                          wheelDiameter,
     string                                         networktablename
-) : m_drive(new MecanumDrive(*(leftFrontMotor.get()->GetSpeedController().get()), 
-                             *(leftBackMotor.get()->GetSpeedController().get()), 
-                             *(rightFrontMotor.get()->GetSpeedController().get()), 
-                             *(rightBackMotor.get()->GetSpeedController().get()))),
+):
+// ) : m_drive(new MecanumDrive
+//     (*(leftFrontMotor.get()->GetSpeedController().get()), 
+//     *(leftBackMotor.get()->GetSpeedController().get()), 
+//     *(rightFrontMotor.get()->GetSpeedController().get()), 
+//     *(rightBackMotor.get()->GetSpeedController().get()))),
     m_leftFrontMotor(leftFrontMotor),
     m_leftBackMotor(leftBackMotor),
     m_rightFrontMotor(rightFrontMotor),
     m_rightBackMotor(rightBackMotor),
-    m_pigeon(PigeonFactory::GetFactory()->GetPigeon(DragonPigeon::PIGEON_USAGE::CENTER_OF_ROBOT)),
+    //m_pigeon(PigeonFactory::GetFactory()->GetPigeon(DragonPigeon::PIGEON_USAGE::CENTER_OF_ROBOT)),
     m_maxSpeed(maxSpeed),
     m_maxAngSpeed(maxAngSpeed), 
     m_wheelDiameter(wheelDiameter),
@@ -71,10 +73,10 @@ MecanumChassis::MecanumChassis
     m_track(trackWidth),
     m_ntName(networktablename)
 {
-    if (m_pigeon != nullptr)
-    {
-        m_pigeon->ReZeroPigeon(0.0);
-    }
+    // if (m_pigeon != nullptr)
+    // {
+    //     m_pigeon->ReZeroPigeon(0.0);
+    // }
 }
 
 IChassis::CHASSIS_TYPE MecanumChassis::GetType() const
@@ -92,8 +94,8 @@ void MecanumChassis::Drive
     Logger::GetLogger()->LogData(LOGGER_LEVEL::PRINT, string("MecanumChassis"), string("chassisSpeeds.vx"), chassisSpeeds.vx.value());
     Logger::GetLogger()->LogData(LOGGER_LEVEL::PRINT, string("MecanumChassis"), string("chassisSpeeds.vy"), chassisSpeeds.vy.value());
     Logger::GetLogger()->LogData(LOGGER_LEVEL::PRINT, string("MecanumChassis"), string("chassisSpeeds.omega"), chassisSpeeds.omega.value());
-
-    auto speeds = mode == IHolonomicChassis::CHASSIS_DRIVE_MODE::FIELD_ORIENTED ? FieldDriveUtils::ConvertFieldOrientedToRobot(chassisSpeeds, m_pigeon) : chassisSpeeds;
+    //auto speeds = mode == IHolonomicChassis::CHASSIS_DRIVE_MODE::FIELD_ORIENTED ? FieldDriveUtils::ConvertFieldOrientedToRobot(chassisSpeeds, m_pigeon) : chassisSpeeds;
+    auto speeds = chassisSpeeds;
     auto forward = speeds.vx / m_maxSpeed;
     auto strafe  = speeds.vy / m_maxSpeed;
     auto rot     = speeds.omega / m_maxAngSpeed;

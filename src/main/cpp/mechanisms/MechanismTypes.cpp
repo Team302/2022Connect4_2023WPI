@@ -45,9 +45,11 @@ MechanismTypes* MechanismTypes::GetInstance()
 MechanismTypes::MechanismTypes()
 {
     // @ADDMECH add your mechanism to m_typeMap 
-    m_typeMap["CONVEYOR"] = MechanismTypes::MECHANISM_TYPE::CONVEYOR_MECHANISM;
-    m_typeMap["INTAKE"] = MechanismTypes::MECHANISM_TYPE::INTAKE;
-    m_typeMap["DELIVERY"] = MechanismTypes::MECHANISM_TYPE::DELIVERY;
+    m_typeMap["EXAMPLE"]    = MECHANISM_TYPE::EXAMPLE;
+    m_typeMap["INTAKE"]     = MECHANISM_TYPE::INTAKE;
+    m_typeMap["ARM"]        = MECHANISM_TYPE::ARM;
+    m_typeMap["RELEASE"]    = MECHANISM_TYPE::RELEASE;
+    m_typeMap["FLAGARM"]    = MECHANISM_TYPE::FLAGARM;
 }
 
 MechanismTypes::~MechanismTypes()

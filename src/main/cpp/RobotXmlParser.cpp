@@ -77,13 +77,13 @@ void RobotXmlParser::ParseXML()
         // if it is good
         if (result)
         {
-            unique_ptr<CameraXmlParser> cameraXML = make_unique<CameraXmlParser>();
+            //unique_ptr<CameraXmlParser> cameraXML = make_unique<CameraXmlParser>();
             unique_ptr<ChassisXmlParser> chassisXML = make_unique<ChassisXmlParser>();
             unique_ptr<MechanismXmlParser> mechanismXML = make_unique<MechanismXmlParser>();
-            unique_ptr<PigeonXmlParser> pigeonXML = make_unique<PigeonXmlParser>();
-            unique_ptr<LedXmlParser> ledXML = make_unique<LedXmlParser>();
-            unique_ptr<LimelightXmlParser> limelightXML = make_unique<LimelightXmlParser>();
-            unique_ptr<PDPXmlParser> pdpXML = make_unique<PDPXmlParser>();
+            //unique_ptr<PigeonXmlParser> pigeonXML = make_unique<PigeonXmlParser>();
+            //unique_ptr<LedXmlParser> ledXML = make_unique<LedXmlParser>();
+            //unique_ptr<LimelightXmlParser> limelightXML = make_unique<LimelightXmlParser>();
+            //unique_ptr<PDPXmlParser> pdpXML = make_unique<PDPXmlParser>();
             unique_ptr<RoboRioXmlParser> roborioXML = make_unique<RoboRioXmlParser>();
 
             // get the root node <robot>
@@ -107,23 +107,23 @@ void RobotXmlParser::ParseXML()
                     }
                     else if (strcmp(child.name(), "camera") == 0)
                     {
-                        cameraXML.get()->ParseXML(child);
+                        //cameraXML.get()->ParseXML(child);
                     }
                     else if (strcmp(child.name(), "pdp") == 0)
                     {
-                        pdpXML.get()->ParseXML(child);
+                        //pdpXML.get()->ParseXML(child);
                     }
                     else if ( strcmp(child.name(), "pigeon") == 0 )
                     {
-                        pigeonXML.get()->ParseXML( child);
+                        //pigeonXML.get()->ParseXML( child);
                     }
                     else if ( strcmp(child.name(), "limelight") == 0 )
                     {
-                        limelightXML.get()->ParseXML( child);
+                        //limelightXML.get()->ParseXML( child);
                     }
                     else if ( strcmp(child.name(), "led") == 0 )
                     {
-                        ledXML.get()->ParseXML(child);
+                        //ledXML.get()->ParseXML(child);
                     }
                     else
                     {
@@ -158,6 +158,5 @@ void RobotXmlParser::ParseXML()
     catch(const std::exception& e)
     {
         Logger::GetLogger()->LogData(LOGGER_LEVEL::ERROR_ONCE, string("RobotXmlParser"), string("ParseXML"), string("Error thrown while parsing robot.xml") );
-        
     }
 }

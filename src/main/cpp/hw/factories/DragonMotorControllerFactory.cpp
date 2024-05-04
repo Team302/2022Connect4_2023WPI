@@ -7,13 +7,11 @@
 #include <hw/DistanceAngleCalcStruc.h>
 #include <hw/DragonTalonSRX.h>
 #include <hw/DragonFalcon.h>
-#include <hw/DragonSparkMax.h>
 #include <utils/Logger.h>
 
 #include <ctre/phoenix/motorcontrol/can/TalonSRX.h>
 #include <ctre/phoenix/motorcontrol/can/TalonFX.h>
 #include <ctre/phoenix/motorcontrol/FeedbackDevice.h>
-#include "rev/CANSparkMax.h"
 
 using namespace std;
 using namespace ctre::phoenix::motorcontrol;
@@ -56,7 +54,7 @@ shared_ptr<IDragonMotorController> DragonMotorControllerFactory::CreateMotorCont
     bool 											inverted, 
     bool 											sensorInverted,
     FeedbackDevice  	                            feedbackDevice,
-    DistanceAngleCalcStruc                          calcStruc,
+    DistanceAngleCalcStruc                          calsStruc,
     bool 											brakeMode,
     int 											followMotor,
     int 											peakCurrentDuration,
@@ -80,7 +78,7 @@ shared_ptr<IDragonMotorController> DragonMotorControllerFactory::CreateMotorCont
     auto type = m_typeMap.find(mtype)->second;
     if ( type == MOTOR_TYPE::TALONSRX )
     {
-        auto talon = new DragonTalonSRX(networkTableName, MotorControllerUsage::GetInstance()->GetUsage(usage), canID, pdpID, calcStruc, motorType);
+        auto talon = new DragonTalonSRX(networkTableName, MotorControllerUsage::GetInstance()->GetUsage(usage), canID, pdpID, calsStruc, motorType);
         talon->EnableBrakeMode( brakeMode );
         talon->Invert( inverted );
         talon->SetSensorInverted( sensorInverted );
@@ -116,7 +114,7 @@ shared_ptr<IDragonMotorController> DragonMotorControllerFactory::CreateMotorCont
     }
     else if ( type == MOTOR_TYPE::FALCON )
     {
-        auto talon = new DragonFalcon(networkTableName, MotorControllerUsage::GetInstance()->GetUsage(usage), canID, canBusName, pdpID, calcStruc, motorType);
+        auto talon = new DragonFalcon(networkTableName, MotorControllerUsage::GetInstance()->GetUsage(usage), canID, canBusName, pdpID, calsStruc, motorType);
         talon->EnableBrakeMode( brakeMode );
         talon->Invert( inverted );
         talon->ConfigSelectedFeedbackSensor( feedbackDevice, 0, 50 );
@@ -148,49 +146,6 @@ shared_ptr<IDragonMotorController> DragonMotorControllerFactory::CreateMotorCont
 
         /** **/
         controller.reset( talon );
-    }
-    else if (type == MOTOR_TYPE::BRUSHLESS_SPARK_MAX || type == MOTOR_TYPE::BRUSHED_SPARK_MAX)
-    {
-        DragonSparkMax* smax = nullptr;
-        if (type == MOTOR_TYPE::BRUSHLESS_SPARK_MAX)
-        {
-            smax = new DragonSparkMax(  canID, 
-                                        MotorControllerUsage::GetInstance()->GetUsage(usage), 
-                                        CANSparkMax::MotorType::kBrushless, 
-                                        calcStruc.gearRatio );
-        }
-        else 
-        {
-            smax = new DragonSparkMax(  canID, 
-                                        MotorControllerUsage::GetInstance()->GetUsage(usage), 
-                                        CANSparkMax::MotorType::kBrushed, 
-                                        calcStruc.gearRatio );
-        }
-        smax->Invert( inverted );
-        smax->EnableBrakeMode( brakeMode );
-        smax->InvertEncoder( sensorInverted );
-        smax->EnableCurrentLimiting( enableCurrentLimit );
-        smax->SetSmartCurrentLimiting( continuousCurrentLimit );
-
-        /**  TODO:  implement follower logic
-        if ( followMotor > -1 )
-        {
-            DragonSparkMax* master = nullptr;
-            if ( GetController( followMotor ) != nullptr )
-            {
-                master = dynamic_cast<DragonSparkMax*>( GetController( followMotor ) );
-            }
-            if ( master != nullptr )
-            {
-                smax->Follow( master );
-            }
-            else 
-            {
-                printf( "Invalid follow id %d \n", followMotor );
-            }
-        }    
-        **/
-        controller.reset( smax );
     }
     else
     {
@@ -235,8 +190,4 @@ void DragonMotorControllerFactory::CreateTypeMap()
 {
     m_typeMap["TALONSRX"] = DragonMotorControllerFactory::MOTOR_TYPE::TALONSRX;
     m_typeMap["FALCON"] = DragonMotorControllerFactory::MOTOR_TYPE::FALCON;
-    m_typeMap["BRUSHLESS_SPARK_MAX"] = DragonMotorControllerFactory::MOTOR_TYPE::BRUSHLESS_SPARK_MAX;
-    m_typeMap["BRUSHED_SPARK_MAX"] = DragonMotorControllerFactory::MOTOR_TYPE::BRUSHED_SPARK_MAX;
-
 }
-        	

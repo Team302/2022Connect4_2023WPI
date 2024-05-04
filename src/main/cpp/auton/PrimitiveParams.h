@@ -25,6 +25,10 @@
 // Team 302 includes
 #include <auton/PrimitiveEnums.h>
 // @ADDMECH include for your mechanism 
+#include <mechanisms/ARM/ArmStateMgr.h>
+#include <mechanisms/intake/IntakeStateManager.h>
+#include <mechanisms/release/ReleaseStateMgr.h>
+#include <mechanisms/flagarm/FlagArmStateManager.h>
 
 #include <chassis/IHolonomicChassis.h>
 
@@ -46,8 +50,12 @@ class PrimitiveParams
                 float                                               heading,
                 float                                               startDriveSpeed,
                 float                                               endDriveSpeed,
-                std::string                                         pathName
+                std::string                                         pathName,
                 // @ADDMECH add parameter for your mechanism state 
+                IntakeStateMgr::INTAKE_STATE                        intakeState,
+                ArmStateMgr::ARM_STATE                              armState,
+                ReleaseStateMgr::RELEASE_STATE                      releaseState,
+                FlagArmStateManager::FLAG_ARM_STATE                 flagArmState
         );//Constructor. Takes in all parameters
 
         PrimitiveParams() = delete;
@@ -67,6 +75,10 @@ class PrimitiveParams
         std::string GetPathName() const {return m_pathName;}
         
         // @ADDMECH Add methods to get the state mgr for mechanism 
+        IntakeStateMgr::INTAKE_STATE GetIntakeState() const {return m_intakeState;}
+        ArmStateMgr::ARM_STATE GetArmState() const {return m_armState;}
+        ReleaseStateMgr::RELEASE_STATE GetReleaseState() const {return m_releaseState;}
+        FlagArmStateManager::FLAG_ARM_STATE GetLFlagArmState() const {return m_flagArmState;}
 
 
 
@@ -86,6 +98,10 @@ class PrimitiveParams
         float                                               m_endDriveSpeed;
         std::string                                         m_pathName;
         // @ADDMECH add attribute for your mechanism state 
+        IntakeStateMgr::INTAKE_STATE                        m_intakeState;
+        ArmStateMgr::ARM_STATE                              m_armState;
+        ReleaseStateMgr::RELEASE_STATE                      m_releaseState;
+        FlagArmStateManager::FLAG_ARM_STATE                 m_flagArmState;
 
 
 };
