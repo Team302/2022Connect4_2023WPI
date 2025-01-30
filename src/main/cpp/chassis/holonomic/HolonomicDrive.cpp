@@ -93,7 +93,7 @@ void HolonomicDrive::Run()
     switch (m_speedChooser.GetSelected())
     {
     case DRIVE_SPEED::SLOW:
-        speedMultiplier = 0.25;
+        speedMultiplier = 0.5;
         break;
     case DRIVE_SPEED::LIGHT_SPEED:
         speedMultiplier = 1.0;
